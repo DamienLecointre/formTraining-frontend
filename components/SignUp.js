@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 //NEXT IMPORTS
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 //COMPONENTS IMPORTS
 import Button from "./Button";
@@ -13,7 +14,11 @@ import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 //STYLE IMPORTS
 import styles from "../styles/SignUp.module.css";
 
+const BACKEND_URL_USERS_SIGNUP =
+  process.env.NEXT_PUBLIC_URL_BACKEND_URL_USERS_SIGNUP;
+
 function SignUp() {
+  const router = useRouter();
   // CONST TO SHOW PASSWORD
   const [showPassword, setShowPassword] = useState(false);
 
@@ -27,7 +32,7 @@ function SignUp() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmpassword] = useState("");
+  const [confirPassword, setConfirPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
   // CHECKBOX FUNCTION
@@ -39,6 +44,7 @@ function SignUp() {
   const [emptyFiked, setEmptyFiked] = useState(false);
   const [isWrongFormat, setIsWrongFormat] = useState(false);
   const [matchingPassword, setMatchingPassword] = useState(false);
+  const [isGoodPasswordFormat, setIsGoodPasswordFormat] = useState(false);
   const [CGVChecked, setCGVChecked] = useState(false);
   const [newUserAdded, setNewUserAdded] = useState(false);
 
@@ -53,28 +59,54 @@ function SignUp() {
   // CHECK INPUTS FUNCTIONS
   const handleSignUpClick = () => {
     // console.log("hello");
-    if (!firstName || !lastName || !password || !confirmpassword) {
+    if (!firstName || !lastName || !email || !password || !confirPassword) {
       showTemporaryError(setEmptyFiked);
       return;
     } else {
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setPassword("");
-      setConfirmpassword("");
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      showTemporaryError(setIsWrongFormat);
-      return;
-    }
-    if (password !== confirmpassword) {
-      showTemporaryError(setMatchingPassword);
-      return;
-    }
-    if (isChecked === false) {
-      showTemporaryError(setCGVChecked);
-      return;
+      const newUser = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showTemporaryError(setIsWrongFormat);
+        return;
+      }
+      if (password !== confirPassword) {
+        showTemporaryError(setMatchingPassword);
+        return;
+      }
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      if (!passwordRegex.test(password)) {
+        showTemporaryError(setIsGoodPasswordFormat);
+        return;
+      }
+      if (isChecked === false) {
+        showTemporaryError(setCGVChecked);
+        return;
+      }
+      fetch(`${BACKEND_URL_USERS_SIGNUP}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newUser),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setPassword("");
+          setConfirPassword("");
+          setIsChecked(false);
+          showTemporaryError(setNewUserAdded);
+          setTimeout(() => {
+            setNewUserAdded(false);
+            router.push("/");
+          }, 2000);
+        });
     }
   };
 
@@ -131,8 +163,8 @@ function SignUp() {
               type={showPassword ? "text" : "password"}
               placeholder="Confirm Password"
               className={styles.input}
-              onChange={(e) => setConfirmpassword(e.target.value)}
-              value={confirmpassword}
+              onChange={(e) => setConfirPassword(e.target.value)}
+              value={confirPassword}
             />
             <FontAwesomeIcon
               icon={showPassword ? faEyeSlash : faEye}
@@ -142,6 +174,12 @@ function SignUp() {
           </div>
           {matchingPassword && (
             <p className={styles.alertMessage}>Passwords not matching</p>
+          )}
+          {isGoodPasswordFormat && (
+            <p className={styles.alertMessage}>
+              Password have to include a minimum of 8 characters, an uppercase
+              letter, a lowercase letter, a number and a special character.
+            </p>
           )}
         </form>
         <label htmlFor="CGV" className={styles.checkboxContainer}>
@@ -160,10 +198,15 @@ function SignUp() {
         </label>
         {CGVChecked && (
           <p className={styles.alertMessage}>
-            please accept the general conditions of sale
+            Please accept the general conditions of sale
           </p>
         )}
         <Button name="signUp page" onClickSignup={() => handleSignUpClick()} />
+        {newUserAdded && (
+          <p className={`${styles.alertMessage} ${styles.congratulation}`}>
+            Congratulation !!! Your account was created with success
+          </p>
+        )}
         <div className={styles.signInContainer}>
           <h5 className={styles.signInText}>Already have an account ?</h5>
           <Link href="/logIn" className={styles.signInText}>

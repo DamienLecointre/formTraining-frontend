@@ -103,17 +103,20 @@
   cursor: pointer;
 }
 
+.congratulation {
+  padding-bottom: 20px;
+}
 .signInContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
+.signInContainer :nth-child(2) {
+  color: #EE3A57;;
+}
+
 .signInText {
   font-size: .9rem;
   font-weight: 400;
-}
-
-.signInContainer :nth-child(2) {
-  color: #EE3A57;;
 }
