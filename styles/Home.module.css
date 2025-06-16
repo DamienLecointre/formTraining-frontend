@@ -7,6 +7,33 @@
 }
 
 .title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #EE3A57;
   line-height: 1.15;
   font-size: 4rem;
+}
+
+.linkContainer {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  column-gap: 40px;
+  margin-top: 50px;
+}
+
+.signContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.signContainer  :nth-child(2) {
+  color: #EE3A57;
+  padding-left: 10px;
+}
+
+.signText {
+  font-size: 1rem;
+  font-weight: 500;
 }

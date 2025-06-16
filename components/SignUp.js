@@ -28,11 +28,18 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
+
+  // CHECKBOX FUNCTION
+  const handleCheckboxChange = (e) => {
+    setIsChecked(e.target.checked);
+  };
 
   // ALERTS MESSAGES CONST
   const [emptyFiked, setEmptyFiked] = useState(false);
   const [isWrongFormat, setIsWrongFormat] = useState(false);
   const [matchingPassword, setMatchingPassword] = useState(false);
+  const [CGVChecked, setCGVChecked] = useState(false);
   const [newUserAdded, setNewUserAdded] = useState(false);
 
   // FUNCTION TO HIDDEN ERROR
@@ -56,13 +63,17 @@ function SignUp() {
       setPassword("");
       setConfirmpassword("");
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      showTemporaryError(setIsWrongFormat);
+      return;
+    }
     if (password !== confirmpassword) {
       showTemporaryError(setMatchingPassword);
       return;
     }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      showTemporaryError(setIsWrongFormat);
+    if (isChecked === false) {
+      showTemporaryError(setCGVChecked);
       return;
     }
   };
@@ -133,6 +144,25 @@ function SignUp() {
             <p className={styles.alertMessage}>Passwords not matching</p>
           )}
         </form>
+        <label htmlFor="CGV" className={styles.checkboxContainer}>
+          <input
+            type="checkbox"
+            id="CGV"
+            name="CGV"
+            className={styles.checkbox}
+            onClick={handleCheckboxChange}
+          />
+          <span className={styles.checkboxCustom}></span>
+          <span>
+            I agree with <span className={styles.checkboxLink}>privacy</span>{" "}
+            and <span className={styles.checkboxLink}>policy</span>
+          </span>
+        </label>
+        {CGVChecked && (
+          <p className={styles.alertMessage}>
+            please accept the general conditions of sale
+          </p>
+        )}
         <Button name="signUp page" onClickSignup={() => handleSignUpClick()} />
         <div className={styles.signInContainer}>
           <h5 className={styles.signInText}>Already have an account ?</h5>
