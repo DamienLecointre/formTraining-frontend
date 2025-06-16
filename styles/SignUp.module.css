@@ -8,7 +8,7 @@
 
 .signWrapper {
   width: fit-content;
-  max-width: 300px;
+  max-width: 350px;
   background: #252740;
   padding: 40px 30px;
   border-radius: 10px;
@@ -17,6 +17,16 @@
 .signTitle {
   font-size: 1.5rem;
   font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.inputIcon {
+  position: absolute;
+  font-size: .7rem;
+  color: #808080;
+  top: 50%;
+  left: 6px;
+  transform: translateY(-60%);
 }
 
 .alertMessage {
@@ -30,7 +40,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 1.5rem;
 }
 
 .namesContainer>.input {
@@ -45,6 +54,10 @@
   border-radius: 150px;
   padding: 5px 20px;
   margin: 10px 0;
+}
+
+.input::placeholder {
+  color: #808080;
 }
 
 .checkboxContainer {

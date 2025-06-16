@@ -1,3 +1,4 @@
+//REACT IMPORTS
 import React, { useState } from "react";
 
 //NEXT IMPORTS
@@ -18,6 +19,7 @@ const BACKEND_URL_USERS_SIGNUP =
   process.env.NEXT_PUBLIC_URL_BACKEND_URL_USERS_SIGNUP;
 
 function SignUp() {
+  // CONST ROUTE TO HOME
   const router = useRouter();
   // CONST TO SHOW PASSWORD
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +43,7 @@ function SignUp() {
   };
 
   // ALERTS MESSAGES CONST
-  const [emptyFiked, setEmptyFiked] = useState(false);
+  const [emptyField, setEmptyField] = useState(false);
   const [isWrongFormat, setIsWrongFormat] = useState(false);
   const [matchingPassword, setMatchingPassword] = useState(false);
   const [isGoodPasswordFormat, setIsGoodPasswordFormat] = useState(false);
@@ -60,7 +62,7 @@ function SignUp() {
   const handleSignUpClick = () => {
     // console.log("hello");
     if (!firstName || !lastName || !email || !password || !confirPassword) {
-      showTemporaryError(setEmptyFiked);
+      showTemporaryError(setEmptyField);
       return;
     } else {
       const newUser = {
@@ -114,7 +116,7 @@ function SignUp() {
     <div className={styles.signContainer}>
       <div className={styles.signWrapper}>
         <h3 className={styles.signTitle}>Sign Up</h3>
-        {emptyFiked && (
+        {emptyField && (
           <p className={styles.alertMessage}>Missing or empty fields</p>
         )}
         <form>
